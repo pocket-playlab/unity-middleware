@@ -1,5 +1,5 @@
 require 'rack'
-require 'unity/middleware/response'
+require 'unity/middleware'
 
 describe Unity::Middleware::Response do
 
