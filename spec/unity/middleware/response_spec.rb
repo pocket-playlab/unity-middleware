@@ -1,7 +1,7 @@
 require 'rack'
-require './lib/unity_response'
+require 'unity/middleware/response'
 
-describe UnityResponse do
+describe Unity::Middleware::Response do
 
   let(:response) do
     {
@@ -15,12 +15,12 @@ describe UnityResponse do
   end
 
   let(:middleware) do
-    UnityResponse.new proc { response.values }
+    Unity::Middleware::Response.new proc { response.values }
   end
 
   let(:env) do
     Rack::MockRequest.env_for.tap do |e|
-      e[UnityResponse::HEADER] = '1'
+      e[Unity::Middleware::Response::HEADER] = '1'
     end
   end
 
@@ -49,13 +49,13 @@ describe UnityResponse do
   end
 
   it 'should not wrap the response if the request header is not given' do
-    env.delete(UnityResponse::HEADER)
+    env.delete(Unity::Middleware::Response::HEADER)
     expect(middleware.call(env)).to eq response.values
   end
 
   it 'should not wrap the response if the request header is set to false' do
     ['false', '0'].each do |val|
-      env[UnityResponse::HEADER] = val
+      env[Unity::Middleware::Response::HEADER] = val
       expect(middleware.call(env)).to eq response.values
     end
   end
